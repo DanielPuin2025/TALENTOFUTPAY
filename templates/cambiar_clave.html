@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar contraseña - TalentoFutPay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    <style>
+        * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+        body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #eef2f7; }
+        .panel { width: min(92%, 520px); padding: 32px; background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,.10); }
+        h1 { color: #0b2d5c; margin-top: 0; }
+        label { display: block; margin: 16px 0 7px; font-weight: bold; }
+        input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; }
+        button, a { display: inline-block; margin-top: 22px; padding: 12px 18px; border: 0; border-radius: 8px; font-size: 16px; text-decoration: none; cursor: pointer; }
+        button { background: #2ecc71; color: white; }
+        a { background: #64748b; color: white; margin-left: 8px; }
+    </style>
+</head>
+<body>
+    <main class="panel">
+        <h1>🔐 Cambiar contraseña</h1>
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+            {% for categoria, mensaje in mensajes %}
+                <p style="color:#991b1b; font-weight:bold;">{{ mensaje }}</p>
+            {% endfor %}
+        {% endwith %}
+        <form method="POST">
+            <label for="clave_actual">Contraseña actual</label>
+            <input id="clave_actual" name="clave_actual" type="password" required>
+            <label for="clave_nueva">Nueva contraseña</label>
+            <input id="clave_nueva" name="clave_nueva" type="password" minlength="8" pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$" title="Debe tener mínimo 8 caracteres, incluir mayúscula, minúscula, número y símbolo." required>
+            <label for="confirmacion">Confirmar nueva contraseña</label>
+            <input id="confirmacion" name="confirmacion" type="password" minlength="8" required>
+            <button type="submit">Guardar contraseña</button>
+            <a href="/dashboard">Cancelar</a>
+        </form>
+    </main>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar perfil - TalentoFutPay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #eef2f7; font-family: 'Nunito', Arial, sans-serif; }
+        .panel { width: min(92%, 520px); padding: 32px; background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,.10); }
+        h1 { color: #0b2d5c; margin-top: 0; }
+        label { display: block; margin: 16px 0 7px; font-weight: 700; }
+        input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; }
+        .acciones { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+        button, a { display: inline-block; padding: 12px 18px; border: 0; border-radius: 8px; font-size: 16px; text-decoration: none; cursor: pointer; }
+        button { background: #2ecc71; color: white; }
+        a { background: #64748b; color: white; }
+        .error { margin-bottom: 16px; color: #991b1b; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <main class="panel">
+        <h1>🔄 Cambiar perfil</h1>
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        <form method="POST">
+            <label for="usuario">Usuario</label>
+            <input id="usuario" name="usuario" type="text" autocomplete="username" required>
+            <label for="clave">Contraseña</label>
+            <input id="clave" name="clave" type="password" autocomplete="current-password" required>
+            <div class="acciones">
+                <button type="submit">Entrar con este perfil</button>
+                <a href="{{ '/dashboard' if session.get('usuario') else '/' }}">Cancelar</a>
+            </div>
+        </form>
+    </main>
+</body>
+</html>

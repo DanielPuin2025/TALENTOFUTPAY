@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pagos - TalentoFutPay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #eef2f7;
+        }
+
+        /* MENÚ */
+
+        .menu {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #0b2d5c;
+            color: white;
+            padding: 25px 20px;
+        }
+
+        .menu h2 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .menu a:hover {
+            background: #2ecc71;
+        }
+
+        /* CONTENIDO */
+
+        .contenido {
+            margin-left: 240px;
+            padding: 35px;
+        }
+
+        .encabezado {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.10);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .encabezado-texto {
+            flex: 1;
+        }
+
+        .encabezado h1 {
+            color: #0b2d5c;
+        }
+
+        .logo-encabezado {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .logo-encabezado img {
+            width: 180px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .logo-encabezado .logo-brand {
+            width: 150px;
+            height: auto;
+            object-fit: contain;
+            display: block;
+        }
+
+        .formulario {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            max-width: 750px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.10);
+        }
+
+        .formulario h2 {
+            color: #0b2d5c;
+            margin-bottom: 25px;
+        }
+
+        .campo {
+            margin-bottom: 18px;
+        }
+
+        .campo label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .campo input,
+        .campo select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .boton {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .boton:hover {
+            background: #27ae60;
+        }
+
+        /* TABLA */
+
+        .tabla {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.10);
+        }
+
+        .tabla h2 {
+            color: #0b2d5c;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #0b2d5c;
+            color: white;
+            padding: 13px;
+            text-align: left;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* ESTADOS */
+
+        .pagado {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .pendiente {
+            color: #e67e22;
+            font-weight: bold;
+        }
+
+        /* BOTONES */
+
+        .editar {
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .editar:hover {
+            background: #2980b9;
+        }
+
+        .eliminar {
+            background: #e74c3c;
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .eliminar:hover {
+            background: #c0392b;
+        }
+
+        .sin-datos {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+        }
+
+        @media (max-width: 800px) {
+            .menu { position: relative; width: 100%; height: auto; padding: 16px; }
+            .menu a { display: inline-block; padding: 10px; margin: 3px 0; }
+            .contenido { margin-left: 0; padding: 18px; }
+            .formulario { max-width: 100%; }
+            .tabla { overflow-x: auto; }
+            table { min-width: 700px; }
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+    <!-- MENÚ -->
+
+    <div class="menu">
+
+        <h2><img src="{{ url_for('static', filename='img/logo-transparente.png') }}" alt="TalentoFutPay" style="width:220px; max-width:100%; height:auto;"></h2>
+
+        <a href="/">Inicio</a>
+
+        <a href="/dashboard">Resumen general</a>
+
+        <a href="/jugadoras">Jugadoras</a>
+
+        <a href="/pagos">Pagos</a>
+
+        <a href="/reportes">Reportes</a>
+
+        <a href="/cambiar_perfil">Cambiar perfil</a>
+
+        <a href="/cerrar_sesion" onclick="return confirm('¿Está seguro de que desea cerrar sesión?');">Cerrar sesión</a>
+
+        <a href="/cambiar_clave">Cambiar contraseña</a>
+
+        <a href="/descargar_respaldo">Descargar respaldo</a>
+
+    </div>
+
+
+    <!-- CONTENIDO -->
+
+    <div class="contenido">
+
+
+        <div class="encabezado">
+
+            <div class="encabezado-texto">
+                <h1>Gestión de Pagos</h1>
+            </div>
+
+            <div class="logo-encabezado">
+                <img class="logo-brand" src="{{ url_for('static', filename='img/IMAGEN IDRY') }}" alt="Logo institucional">
+            </div>
+
+        </div>
+
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+            {% for categoria, mensaje in mensajes %}
+                <div class="mensaje {{ categoria }}" style="margin-bottom:18px; padding:13px 16px; border-radius:8px; font-weight:bold;">
+                    {{ mensaje }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+
+        <!-- FORMULARIO -->
+
+        <div class="formulario">
+
+            <h2>➕ Registrar Pago</h2>
+
+            <form method="POST">
+
+
+                <!-- JUGADORA -->
+
+                <div class="campo">
+
+                    <label>Seleccionar jugadora</label>
+
+                    <select name="jugadora_id" required>
+
+                        <option value="">
+                            Selecciona una jugadora
+                        </option>
+
+                        {% for jugadora in jugadoras %}
+
+                            <option value="{{ jugadora.id }}">
+                                {{ jugadora.nombre }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <!-- MES -->
+
+                <div class="campo">
+
+                    <label>Mes</label>
+
+                    <select name="mes" required>
+
+                        <option value="">
+                            Selecciona el mes
+                        </option>
+
+                        <option value="Enero">Enero</option>
+                        <option value="Febrero">Febrero</option>
+                        <option value="Marzo">Marzo</option>
+                        <option value="Abril">Abril</option>
+                        <option value="Mayo">Mayo</option>
+                        <option value="Junio">Junio</option>
+                        <option value="Julio">Julio</option>
+                        <option value="Agosto">Agosto</option>
+                        <option value="Septiembre">Septiembre</option>
+                        <option value="Octubre">Octubre</option>
+                        <option value="Noviembre">Noviembre</option>
+                        <option value="Diciembre">Diciembre</option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- FECHA -->
+
+                <div class="campo">
+
+                    <label for="fecha">Fecha del pago</label>
+
+                    <input id="fecha-visible" type="text" name="fecha_visible" inputmode="numeric" placeholder="dd/mm/aaaa" aria-label="Fecha del pago" pattern="\d{2}/\d{2}/\d{4}" required>
+                    <input id="fecha" type="hidden" name="fecha">
+
+                </div>
+
+
+                <!-- VALOR -->
+
+                <div class="campo">
+
+                    <label for="valor">Valor del pago (COP)</label>
+
+                    <input
+                        id="valor"
+                        type="number"
+                        name="valor"
+                        placeholder="Ejemplo: 50000"
+                        min="0"
+                        required
+                    >
+
+                    <div id="saldo-pendiente" style="margin-top:10px; color:#0b2d5c; font-weight:700;">
+                        Saldo pendiente: $80.000
+                    </div>
+
+                </div>
+
+                <div class="campo">
+                    <label>Método de pago</label>
+                    <select name="metodo_pago" required>
+                        <option value="">Selecciona el método</option>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Transferencia">Transferencia</option>
+                        <option value="Nequi">Nequi</option>
+                    </select>
+                </div>
+
+
+                <!-- ESTADO -->
+
+                <div class="campo">
+
+                    <label>Estado</label>
+
+                    <select name="estado" required>
+
+                        <option value="">
+                            Selecciona el estado
+                        </option>
+
+                        <option value="Pagado">
+                            ✅ Pagado
+                        </option>
+
+                        <option value="Pendiente">
+                            ⏳ Pendiente
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="boton"
+                >
+                    💾 Guardar Pago
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+        <!-- TABLA DE PAGOS -->
+
+        <div class="tabla">
+
+            <h2>📋 Pagos registrados</h2>
+
+            <form method="GET" style="display:grid; grid-template-columns:2fr 1fr 1fr auto; gap:10px; margin:18px 0;">
+                <input type="search" name="busqueda" value="{{ busqueda }}" placeholder="Buscar por jugadora" style="padding:12px; border:1px solid #cbd5e1; border-radius:8px;">
+                <select name="filtro_mes" style="padding:12px; border:1px solid #cbd5e1; border-radius:8px;">
+                    <option value="">Todos los meses</option>
+                    {% for nombre_mes in ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'] %}
+                        <option value="{{ nombre_mes }}" {% if filtro_mes == nombre_mes %}selected{% endif %}>{{ nombre_mes }}</option>
+                    {% endfor %}
+                </select>
+                <select name="filtro_estado" style="padding:12px; border:1px solid #cbd5e1; border-radius:8px;">
+                    <option value="">Todos los estados</option>
+                    <option value="Pagado" {% if filtro_estado == 'Pagado' %}selected{% endif %}>Pagado</option>
+                    <option value="Pendiente" {% if filtro_estado == 'Pendiente' %}selected{% endif %}>Pendiente</option>
+                </select>
+                <button type="submit" class="boton">🔎 Filtrar</button>
+            </form>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Jugadora</th>
+
+                        <th>Mes</th>
+
+                        <th>Fecha</th>
+
+                        <th>Método</th>
+
+                        <th>Valor</th>
+
+                        <th>Saldo pendiente</th>
+
+                        <th>Estado</th>
+
+                        <th>Acciones</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for pago in pagos %}
+
+                    <tr>
+
+                        <td>
+                            {{ pago.nombre }}
+                        </td>
+
+                        <td>
+                            {{ pago.mes }}
+                        </td>
+
+                        <td>
+                            {{ pago.fecha }}
+                        </td>
+
+                        <td>
+                            {{ pago.metodo_pago }}
+                        </td>
+
+                        <td>
+                            {{ pago.valor|cop }} COP
+                        </td>
+
+                        <td>
+                            {{ pago.saldo_pendiente|cop }} COP
+                        </td>
+
+                        <td>
+
+                            {% if pago.estado == "Pagado" %}
+
+                                <span class="pagado">
+                                    ✅ Pagado
+                                </span>
+
+                            {% else %}
+
+                                <span class="pendiente">
+                                    ⏳ Pendiente
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {% if pago.estado == "Pendiente" %}
+                                <a
+                                    href="/recordatorio_whatsapp/{{ pago.id }}"
+                                    class="editar"
+                                    target="_blank"
+                                    rel="noopener"
+                                >
+                                    💬 WhatsApp
+                                </a>
+                            {% endif %}
+
+                            <!-- EDITAR -->
+
+                            <a
+                                href="/editar_pago/{{ loop.index0 }}"
+                                class="editar"
+                            >
+                                ✏️ Editar
+                            </a>
+
+
+                            <!-- ELIMINAR -->
+
+                            <a
+                                href="/eliminar_pago/{{ loop.index0 }}"
+                                class="eliminar"
+                                onclick="return confirm('¿Seguro que quieres eliminar este pago?');"
+                            >
+                                🗑️ Eliminar
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                    {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="sin-datos"
+                        >
+                            Todavía no hay pagos registrados.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+<script>
+    const valorInput = document.getElementById('valor');
+    const saldoPendiente = document.getElementById('saldo-pendiente');
+    const MENSUALIDAD = 80000;
+
+    const actualizarSaldo = () => {
+        const pago = Number(valorInput.value || 0);
+        const restante = Math.max(0, MENSUALIDAD - pago);
+        const formatCOP = (valor) => new Intl.NumberFormat('es-CO', { maximumFractionDigits: 0 }).format(valor);
+        saldoPendiente.textContent = `Saldo pendiente: $${formatCOP(restante)}`;
+    };
+
+    if (valorInput) {
+        valorInput.addEventListener('input', actualizarSaldo);
+        actualizarSaldo();
+    }
+
+    const form = document.querySelector('form[method="POST"]');
+    if (form) {
+        form.addEventListener('submit', function (evento) {
+            const visible = document.getElementById('fecha-visible');
+            const partes = visible.value.split('/');
+            if (partes.length !== 3) {
+                evento.preventDefault();
+                visible.setCustomValidity('Escribe la fecha como dd/mm/aaaa.');
+                visible.reportValidity();
+                return;
+            }
+            visible.setCustomValidity('');
+            document.getElementById('fecha').value = `${partes[2]}-${partes[1]}-${partes[0]}`;
+        });
+    }
+</script>
+
+</body>
+
+</html>

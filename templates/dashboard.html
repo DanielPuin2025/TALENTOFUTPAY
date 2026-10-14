@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Resumen general - TalentoFutPay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #eef2f7;
+        }
+
+        /* =========================
+           MENÚ
+        ========================= */
+
+        .menu {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #0b2d5c;
+            color: white;
+            padding: 25px 20px;
+        }
+
+        .menu h2 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .menu a:hover {
+            background: #2ecc71;
+        }
+
+        /* =========================
+           CONTENIDO
+        ========================= */
+
+        .contenido {
+            margin-left: 240px;
+            padding: 35px;
+        }
+
+        .encabezado {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.10);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .encabezado-texto {
+            flex: 1;
+        }
+
+        .encabezado h1 {
+            color: #0b2d5c;
+            margin-bottom: 8px;
+        }
+
+        .encabezado p {
+            color: #666;
+        }
+
+        .logo-encabezado {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .logo-encabezado img {
+            width: 180px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .logo-encabezado .logo-brand {
+            width: 140px;
+        }
+
+        /* =========================
+           TARJETAS
+        ========================= */
+
+        .tarjetas {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .tarjeta {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.10);
+        }
+
+        .tarjeta h3 {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .numero {
+            color: #0b2d5c;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           TABLA
+        ========================= */
+
+        .tabla {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.10);
+        }
+
+        .tabla h2 {
+            color: #0b2d5c;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #0b2d5c;
+            color: white;
+            padding: 13px;
+            text-align: left;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .pagado {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .pendiente {
+            color: #e67e22;
+            font-weight: bold;
+        }
+
+        .sin-datos {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+        }
+
+        @media (max-width: 800px) {
+            .menu { position: relative; width: 100%; height: auto; padding: 16px; }
+            .menu a { display: inline-block; padding: 10px; margin: 3px 0; }
+            .contenido { margin-left: 0; padding: 18px; }
+            .tarjetas { grid-template-columns: 1fr; }
+            .tabla { overflow-x: auto; }
+            table { min-width: 620px; }
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+    <!-- =========================
+         MENÚ
+    ========================= -->
+
+    <div class="menu">
+
+        <h2><img src="{{ url_for('static', filename='img/logo-transparente.png') }}" alt="TalentoFutPay" style="width:220px; max-width:100%; height:auto;"></h2>
+
+        <a href="/">Inicio</a>
+
+        <a href="/dashboard">Resumen general</a>
+
+        <a href="/jugadoras">Jugadoras</a>
+
+        <a href="/pagos">Pagos</a>
+
+        <a href="/reportes">Reportes</a>
+
+        <a href="/recordatorios_pendientes">Recordatorios</a>
+
+        <a href="/cambiar_perfil">Cambiar perfil</a>
+
+        <a href="/cerrar_sesion" onclick="return confirm('¿Está seguro de que desea cerrar sesión?');">Cerrar sesión</a>
+
+        <a href="/cambiar_clave">Cambiar contraseña</a>
+
+        <a href="/descargar_respaldo">Descargar respaldo</a>
+
+    </div>
+
+
+    <!-- =========================
+         CONTENIDO
+    ========================= -->
+
+    <div class="contenido">
+
+
+        <div class="encabezado">
+
+            <div class="encabezado-texto">
+                <h1>Resumen general</h1>
+
+                <p>
+                    Resumen general de TalentoFutPay
+                </p>
+            </div>
+
+            <div class="logo-encabezado">
+                <img class="logo-brand" src="{{ url_for('static', filename='img/IMAGEN IDRY') }}" alt="Logo institucional">
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             TARJETAS
+        ========================= -->
+
+        <div class="tarjetas">
+
+
+            <!-- JUGADORAS -->
+
+            <div class="tarjeta">
+
+                <h3> Jugadoras registradas</h3>
+
+                <div class="numero">
+
+                    {{ cantidad_jugadoras }}
+
+                </div>
+
+            </div>
+
+
+            <!-- RECAUDADO -->
+
+            <div class="tarjeta">
+
+                <h3> Total recaudado</h3>
+
+                <div class="numero">
+
+                    {{ total_recaudado|cop }} COP
+
+                </div>
+
+            </div>
+
+
+            <!-- PENDIENTE -->
+
+            <div class="tarjeta">
+
+                <h3>Total pendiente</h3>
+
+                <div class="numero">
+
+                    {{ total_pendiente|cop }} COP
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <div class="tabla" style="margin-bottom:30px;">
+            <h2> Estado de los pagos</h2>
+            <div style="max-width:520px; margin:0 auto;">
+                <canvas id="graficoPagos" data-pagados="{{ cantidad_pagados }}" data-pendientes="{{ cantidad_pendientes }}" aria-label="Gráfico de pagos pagados y pendientes"></canvas>
+            </div>
+        </div>
+
+
+        <!-- =========================
+             ÚLTIMOS PAGOS
+        ========================= -->
+
+        <div class="tabla">
+
+            <h2> Pagos registrados</h2>
+
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Jugadora</th>
+
+                        <th>Mes</th>
+
+                        <th>Fecha</th>
+
+                        <th>Valor</th>
+
+                        <th>Estado</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    {% for pago in pagos %}
+
+                    <tr>
+
+                        <td>
+                            {{ pago.nombre }}
+                        </td>
+
+                        <td>
+                            {{ pago.mes }}
+                        </td>
+
+                        <td>
+                            {{ pago.fecha }}
+                        </td>
+
+                        <td>
+                            {{ pago.valor|cop }} COP
+                        </td>
+
+                        <td>
+
+                            {% if pago.estado == "Pagado" %}
+
+                                <span class="pagado">
+                                    ✅ Pagado
+                                </span>
+
+                            {% else %}
+
+                                <span class="pendiente">
+                                    ⏳ Pendiente
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                    {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="sin-datos"
+                        >
+                            Todavía no hay pagos registrados.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+    </div>
+
+    <script>
+        const grafico = document.getElementById('graficoPagos');
+        new Chart(grafico, {
+            type: 'doughnut',
+            data: {
+                labels: ['Pagados', 'Pendientes'],
+                datasets: [{
+                    data: [Number(grafico.dataset.pagados), Number(grafico.dataset.pendientes)],
+                    backgroundColor: ['#22c55e', '#f59e0b'],
+                    borderColor: '#ffffff',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

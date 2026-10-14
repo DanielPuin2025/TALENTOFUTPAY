@@ -17,6 +17,10 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("TALENTOFUTPAY_SECRET_KEY", "talentofutpay-clave-local")
 USUARIO_ADMIN = os.environ.get("TALENTOFUTPAY_USER", "admin")
 CLAVE_ADMIN = os.environ.get("TALENTOFUTPAY_PASSWORD", "admin123")
+USUARIO_TESORERO = os.environ.get("TALENTOFUTPAY_TREASURER_USER", "tesorero")
+CLAVE_TESORERO = os.environ.get("TALENTOFUTPAY_TREASURER_PASSWORD", "tesorero123")
+USUARIO_ENTRENADOR = os.environ.get("TALENTOFUTPAY_COACH_USER", "entrenador")
+CLAVE_ENTRENADOR = os.environ.get("TALENTOFUTPAY_COACH_PASSWORD", "entrenador123")
 DATABASE = Path(
     os.environ.get(
         "TALENTOFUTPAY_DATABASE_PATH",
@@ -75,10 +79,12 @@ def init_database():
             (USUARIO_ADMIN, clave_admin),
         )
         connection.execute(
-            "INSERT OR IGNORE INTO usuarios (usuario, clave, rol) VALUES ('tesorero', 'tesorero123', 'tesorero')"
+            "INSERT OR IGNORE INTO usuarios (usuario, clave, rol) VALUES (?, ?, 'tesorero')",
+            (USUARIO_TESORERO, CLAVE_TESORERO),
         )
         connection.execute(
-            "INSERT OR IGNORE INTO usuarios (usuario, clave, rol) VALUES ('entrenador', 'entrenador123', 'entrenador')"
+            "INSERT OR IGNORE INTO usuarios (usuario, clave, rol) VALUES (?, ?, 'entrenador')",
+            (USUARIO_ENTRENADOR, CLAVE_ENTRENADOR),
         )
         columnas_jugadora = {
             fila["name"]

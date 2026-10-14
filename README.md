@@ -36,14 +36,17 @@ Aplicacion web Flask para gestionar jugadoras, pagos y recordatorios. Usa SQLite
    - `TALENTOFUTPAY_SECRET_KEY`: una clave aleatoria larga y privada.
    - `TALENTOFUTPAY_USER`: usuario administrador inicial.
    - `TALENTOFUTPAY_PASSWORD`: contrasena inicial fuerte.
+   - `TALENTOFUTPAY_TREASURER_USER` y `TALENTOFUTPAY_TREASURER_PASSWORD`:
+     usuario y contrasena iniciales del tesorero.
+   - `TALENTOFUTPAY_COACH_USER` y `TALENTOFUTPAY_COACH_PASSWORD`: usuario y
+     contrasena iniciales del entrenador.
    - `PORT`: `5000`, salvo que Easypanel ya lo configure automaticamente.
 
    Configura estas variables como secretos en Easypanel; no las escribas en el
    repositorio. La base se inicializa al arrancar. Las credenciales iniciales
-   solo se aplican cuando la base esta vacia; si la base ya existe, cambia las
-   claves desde la aplicacion. Antes de publicar el servicio, inicia sesion con
-   cada cuenta creada por defecto y cambia sus contrasenas desde la opcion
-   **Cambiar clave**.
+   se usan para crear las cuentas cuando la base esta vacia; si la base ya existe,
+   cambiar estas variables no modifica las cuentas guardadas. En ese caso, inicia
+   sesion y cambia las claves desde la opcion **Cambiar clave**.
 5. Configura el puerto interno `5000` y el dominio del servicio. Activa HTTPS en
    Easypanel y usa `/health` como ruta de comprobacion si el panel permite
    configurar una.

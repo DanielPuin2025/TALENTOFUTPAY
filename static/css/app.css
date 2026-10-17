@@ -245,28 +245,230 @@ td {
 }
 
 @media (max-width: 800px) {
+    html,
+    body {
+        max-width: 100%;
+        overflow-x: hidden !important;
+    }
+
+    body::before,
+    body::after {
+        font-size: 36px;
+        letter-spacing: 12px;
+        opacity: .25;
+    }
+
     .menu {
+        position: sticky !important;
+        top: 0;
+        z-index: 1000 !important;
+        display: flex !important;
+        align-items: center;
+        gap: 8px;
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        padding: 8px 12px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        white-space: nowrap;
+        overscroll-behavior-x: contain;
+        scrollbar-width: thin;
         box-shadow: 0 6px 18px rgba(11, 34, 53, .15);
     }
 
     .menu h2 {
-        margin-bottom: 18px;
+        flex: 0 0 104px;
+        width: 104px;
+        margin: 0 4px 0 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+    }
+
+    .menu h2 img {
+        display: block;
+        width: 100% !important;
+        max-height: 46px;
+        object-fit: contain;
     }
 
     .menu a {
-        display: inline-block !important;
+        flex: 0 0 auto;
+        display: inline-flex !important;
+        align-items: center;
+        min-height: 44px;
         padding: 10px 12px !important;
-        margin: 3px 2px !important;
-        font-size: .96rem !important;
+        margin: 0 !important;
+        font-size: .94rem !important;
+        white-space: nowrap;
+        transform: none;
     }
 
     .contenido {
-        padding: 22px 16px;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        margin-left: 0 !important;
+        padding: 18px 14px !important;
+        overflow-x: hidden;
+    }
+
+    .contenido > * {
+        min-width: 0;
+        max-width: 100%;
     }
 
     .encabezado,
     .formulario,
     .tabla {
-        padding: 22px;
+        max-width: 100%;
+        padding: 18px !important;
+    }
+
+    .contenido h1 {
+        font-size: clamp(1.45rem, 6vw, 2rem);
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+    }
+
+    .contenido h2 {
+        font-size: clamp(1.2rem, 5vw, 1.6rem);
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+    }
+
+    .tarjetas,
+    .modulos,
+    .torneos-grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)) !important;
+        gap: 14px;
+    }
+
+    .tarjeta,
+    .modulo-card,
+    .torneo-card {
+        min-width: 0;
+        padding: 18px;
+    }
+
+    .tabla {
+        overflow-x: auto !important;
+        overscroll-behavior-x: contain;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+
+    .tabla table,
+    .contenido > table {
+        width: max-content !important;
+        min-width: 620px !important;
+        max-width: none !important;
+    }
+
+    .tabla th,
+    .tabla td,
+    .contenido > table th,
+    .contenido > table td {
+        padding: 10px;
+    }
+
+    .contenido form[method="GET"] {
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 12px !important;
+    }
+
+    .contenido form[method="GET"] > * {
+        min-width: 0;
+    }
+
+    .contenido input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    .contenido select,
+    .contenido textarea {
+        width: 100%;
+        max-width: 100%;
+        min-height: 44px;
+        font-size: 16px !important;
+    }
+
+    .contenido button,
+    .contenido input[type="submit"],
+    .contenido .boton,
+    .contenido .btn-crear,
+    .contenido .btn-modulo,
+    .contenido .btn-accion {
+        min-height: 44px;
+    }
+
+    .creadoras-grid {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+        gap: 16px;
+    }
+
+    .contenedor-acerca {
+        max-width: 100%;
+        padding: 24px 18px;
+    }
+
+    .contenedor-acerca .titulo-principal {
+        font-size: clamp(1.7rem, 7vw, 2.3rem);
+    }
+
+    .contenedor-acerca .creadora-card {
+        min-width: 0;
+        padding: 22px 18px;
+    }
+
+    .contenedor-acerca .icono-creadora {
+        font-size: 60px;
+    }
+
+    .contenedor-acerca .btn-volver {
+        min-height: 44px;
+        padding: 12px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contenido {
+        padding: 14px 10px !important;
+    }
+
+    .encabezado,
+    .formulario,
+    .tabla {
+        padding: 15px !important;
+        border-radius: 12px;
+    }
+
+    .tarjetas,
+    .modulos,
+    .torneos-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    .torneo-acciones {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .torneo-acciones .btn-accion {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 8px;
+        text-align: center;
+    }
+
+    .contenedor-acerca {
+        padding: 20px 14px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body,
+    body::before,
+    body::after {
+        animation: none !important;
     }
 }

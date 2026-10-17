@@ -417,7 +417,7 @@ init_database()
 
 @app.before_request
 def proteger_aplicacion():
-    if request.endpoint not in {"index", "static"} and not session.get("usuario"):
+    if request.endpoint not in {"index", "static", "health_check"} and not session.get("usuario"):
         return redirect("/")
     permisos = {
         "jugadoras": {"admin", "instructor"},

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Directory -Depth 0 | Where-Object { $_.Name -ne '.venv' } | Select-Object Name)",
+      "PowerShell(python app.py)"
+    ]
+  }
+}

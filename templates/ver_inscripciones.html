@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscripciones - TalentoFutPay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #eef2f7;
+        }
+
+        .menu {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #0b2d5c;
+            color: white;
+            padding: 25px 20px;
+            overflow-y: auto;
+        }
+
+        .menu h2 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .menu a:hover {
+            background: #2ecc71;
+        }
+
+        .contenido {
+            margin-left: 240px;
+            padding: 35px;
+        }
+
+        .encabezado {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.10);
+        }
+
+        .encabezado h1 {
+            color: #0b2d5c;
+            margin-bottom: 10px;
+        }
+
+        .info-torneo {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .tabla {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.10);
+        }
+
+        .tabla h2 {
+            color: #0b2d5c;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #0b2d5c;
+            color: white;
+            padding: 13px;
+            text-align: left;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .btn-volver {
+            display: inline-block;
+            background: #95a5a6;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .btn-volver:hover {
+            background: #7f8c8d;
+            color: white;
+        }
+
+        .btn-inscribir {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 20px;
+            margin-left: 10px;
+        }
+
+        .btn-inscribir:hover {
+            background: #2980b9;
+            color: white;
+        }
+
+        .eliminar {
+            background: #e74c3c;
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .eliminar:hover {
+            background: #c0392b;
+        }
+
+        .sin-datos {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+        }
+
+        @media (max-width: 800px) {
+            .menu { position: relative; width: 100%; height: auto; padding: 16px; }
+            .menu a { display: inline-block; padding: 10px; margin: 3px 0; }
+            .contenido { margin-left: 0; padding: 18px; }
+            .tabla { overflow-x: auto; }
+            table { min-width: 620px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="menu">
+    <h2><img src="{{ url_for('static', filename='img/logo-transparente.png') }}" alt="TalentoFutPay" style="width:220px; max-width:100%; height:auto;"></h2>
+    <a href="/">Inicio</a>
+    <a href="/dashboard">Resumen general</a>
+    <a href="/jugadoras">Jugadoras</a>
+    <a href="/pagos">Pagos</a>
+    <a href="/reportes">Reportes</a>
+    <a href="/torneos">Torneos</a>
+    <a href="/recordatorios_pendientes">Recordatorios</a>
+    {% if session.rol == 'admin' %}
+    <a href="/panel_admin">Panel Administrador</a>
+    {% endif %}
+    <a href="/cerrar_sesion" onclick="return confirm('¿Está seguro de que desea cerrar sesión?');">Cerrar sesión</a>
+    <a href="/cambiar_clave">Cambiar contraseña</a>
+    <a href="/descargar_respaldo">Descargar respaldo</a>
+</div>
+
+<div class="contenido">
+    <div class="encabezado">
+        <h1>📋 Jugadoras Inscritas</h1>
+        <div class="info-torneo">
+            <strong>Torneo:</strong> {{ torneo.nombre }}<br>
+            <strong>Fechas:</strong> {{ torneo.fecha_inicio }} al {{ torneo.fecha_fin }}<br>
+            <strong>Total inscritas:</strong> {{ inscripciones|length }}
+        </div>
+    </div>
+
+    {% with mensajes = get_flashed_messages(with_categories=true) %}
+        {% for categoria, mensaje in mensajes %}
+            <div class="mensaje {{ categoria }}" style="margin-bottom:18px; padding:13px 16px; border-radius:8px; font-weight:bold; background: {% if categoria == 'success' %}#d4edda{% else %}#f8d7da{% endif %}; color: {% if categoria == 'success' %}#155724{% else %}#721c24{% endif %};">
+                {{ mensaje }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+    <a href="/torneos" class="btn-volver">← Volver a Torneos</a>
+    <a href="/inscribir_jugadora_torneo/{{ torneo.id }}" class="btn-inscribir">➕ Inscribir Otra Jugadora</a>
+
+    <div class="tabla">
+        <h2>Listado de Inscritas</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Jugadora</th>
+                    <th>Inscrita por</th>
+                    <th>Fecha de Inscripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for inscripcion in inscripciones %}
+                <tr>
+                    <td>{{ inscripcion.jugadora }}</td>
+                    <td>{{ inscripcion.instructor }}</td>
+                    <td>{{ inscripcion.fecha_inscripcion }}</td>
+                    <td>
+                        <a
+                            href="/eliminar_inscripcion/{{ inscripcion.id }}"
+                            class="eliminar"
+                            onclick="return confirm('¿Seguro que quieres eliminar esta inscripción?');"
+                        >
+                            🗑️ Eliminar
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" class="sin-datos">
+                        No hay jugadoras inscritas en este torneo todavía.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

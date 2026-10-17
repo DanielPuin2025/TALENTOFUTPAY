@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recordatorios - TalentoFutPay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    <style>
+        * { box-sizing: border-box; }
+        body { background: #eef2f7; font-family: 'Nunito', Arial, sans-serif; }
+        .menu {
+            width: 240px; height: 100vh; position: fixed; left: 0; top: 0;
+            background: #0b2d5c; color: white; padding: 25px 20px;
+        }
+        .menu h2 { text-align: center; margin-bottom: 40px; }
+        .menu a { display: block; color: white; text-decoration: none; padding: 15px; border-radius: 8px; margin-bottom: 10px; }
+        .menu a:hover { background: #2ecc71; }
+        .contenido { margin-left: 240px; padding: 35px; }
+        .encabezado {
+            background: white; padding: 25px; border-radius: 15px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,.10);
+        }
+        .encabezado h1 { color: #0b2d5c; }
+        .tabla {
+            background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,.10);
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #0b2d5c; color: white; padding: 13px; text-align: left; }
+        td { padding: 13px; border-bottom: 1px solid #ddd; }
+        .boton {
+            display: inline-block; background: #2ecc71; color: white; text-decoration: none; padding: 10px 14px; border-radius: 8px; font-weight: 700;
+        }
+        .boton:hover { background: #27ae60; }
+        .sin-datos { text-align:center; color:#777; padding:20px; }
+        @media (max-width: 800px) {
+            .menu { position: relative; width: 100%; height: auto; padding: 16px; }
+            .menu a { display: inline-block; padding: 10px; margin: 3px 0; }
+            .contenido { margin-left: 0; padding: 18px; }
+            .tabla { overflow-x: auto; }
+            table { min-width: 700px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <h2><img src="{{ url_for('static', filename='img/logo-transparente.png') }}" alt="TalentoFutPay" style="width:220px; max-width:100%; height:auto;"></h2>
+        <a href="/dashboard">Resumen general</a>
+        <a href="/jugadoras">Jugadoras</a>
+        <a href="/pagos">Pagos</a>
+        <a href="/reportes">Reportes</a>
+        <a href="/torneos">Torneos</a>
+        <a href="/recordatorios_pendientes">Recordatorios</a>
+        {% if session.rol == 'admin' %}
+        <a href="/panel_admin">Panel Administrador</a>
+        {% endif %}
+        <a href="/cerrar_sesion" onclick="return confirm('¿Está seguro de que desea cerrar sesión?');">Cerrar sesión</a>
+    </div>
+
+    <div class="contenido">
+        <div class="encabezado">
+            <h1>📬 Recordatorios de pagos pendientes</h1>
+        </div>
+
+        <div class="tabla">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Jugadora</th>
+                        <th>Acudiente</th>
+                        <th>Mes</th>
+                        <th>Valor</th>
+                        <th>Fecha</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recordatorio in recordatorios %}
+                    <tr>
+                        <td>{{ recordatorio.jugadora }}</td>
+                        <td>{{ recordatorio.acudiente }}</td>
+                        <td>{{ recordatorio.mes }}</td>
+                        <td>{{ recordatorio.valor|cop }}</td>
+                        <td>{{ recordatorio.fecha or 'Sin fecha' }}</td>
+                        <td>
+                            {% if recordatorio.enlace %}
+                                <a href="{{ recordatorio.enlace }}" target="_blank" rel="noopener" class="boton">💬 Enviar</a>
+                            {% else %}
+                                Sin teléfono
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="sin-datos">No hay pagos pendientes para recordar.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Editar Jugadora - TalentoFutPay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #eef2f7;
+        }
+
+        /* MENÚ */
+
+        .menu {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #0b2d5c;
+            color: white;
+            padding: 25px 20px;
+        }
+
+        .menu h2 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .menu a:hover {
+            background: #2ecc71;
+        }
+
+        /* CONTENIDO */
+
+        .contenido {
+            margin-left: 240px;
+            padding: 35px;
+        }
+
+        .encabezado {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.10);
+        }
+
+        .encabezado h1 {
+            color: #0b2d5c;
+        }
+
+        .formulario {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 700px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.10);
+        }
+
+        .formulario h2 {
+            color: #0b2d5c;
+            margin-bottom: 25px;
+        }
+
+        .campo {
+            margin-bottom: 20px;
+        }
+
+        .campo label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .campo input,
+        .campo select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .boton {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .boton:hover {
+            background: #27ae60;
+        }
+
+        .cancelar {
+            background: #777;
+            color: white;
+            text-decoration: none;
+            padding: 13px 25px;
+            border-radius: 8px;
+            margin-left: 10px;
+        }
+
+        .cancelar:hover {
+            background: #555;
+        }
+
+        @media (max-width: 800px) {
+            .menu { position: relative; width: 100%; height: auto; padding: 16px; }
+            .menu a { display: inline-block; padding: 10px; margin: 3px 0; }
+            .contenido { margin-left: 0; padding: 18px; }
+            .formulario { max-width: 100%; }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- MENÚ -->
+
+    <div class="menu">
+
+        <h2><img src="{{ url_for('static', filename='img/logo-transparente.png') }}" alt="TalentoFutPay" style="width:220px; max-width:100%; height:auto;"></h2>
+
+        <a href="/">Inicio</a>
+
+        <a href="/dashboard">Resumen general</a>
+
+        <a href="/jugadoras">Jugadoras</a>
+
+        <a href="/pagos">Pagos</a>
+
+        <a href="/reportes">Reportes</a>
+
+        <a href="/cerrar_sesion" onclick="return confirm('¿Está seguro de que desea cerrar sesión?');">Cerrar sesión</a>
+
+        <a href="/cambiar_clave">Cambiar contraseña</a>
+
+        <a href="/descargar_respaldo">Descargar respaldo</a>
+
+    </div>
+
+
+    <!-- CONTENIDO -->
+
+    <div class="contenido">
+
+        <div class="encabezado">
+
+            <h1>✏️ Editar Jugadora</h1>
+
+        </div>
+
+
+        <div class="formulario">
+
+            <h2>Modificar información</h2>
+
+            <form method="POST">
+
+
+                <div class="campo">
+
+                    <label>Nombre completo</label>
+
+                    <input
+                        type="text"
+                        name="nombre"
+                        value="{{ jugadora.nombre }}"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="campo">
+                    <label>Nombre del acudiente</label>
+                    <input type="text" name="acudiente_nombre" value="{{ jugadora.acudiente_nombre or '' }}">
+                </div>
+
+
+                <div class="campo">
+                    <label>Teléfono del acudiente</label>
+                    <input type="tel" name="acudiente_telefono" value="{{ jugadora.acudiente_telefono or '' }}">
+                </div>
+
+
+                <div class="campo">
+                    <label>Estado de la jugadora</label>
+                    <select name="estado" required>
+                        <option value="Activa" {% if jugadora.estado == 'Activa' %}selected{% endif %}>✅ Activa</option>
+                        <option value="Lesionada" {% if jugadora.estado == 'Lesionada' %}selected{% endif %}>🩹 Lesionada</option>
+                        <option value="Suspendida" {% if jugadora.estado == 'Suspendida' %}selected{% endif %}>⏸️ Suspendida</option>
+                        <option value="Retirada" {% if jugadora.estado == 'Retirada' %}selected{% endif %}>🚪 Retirada</option>
+                    </select>
+                </div>
+
+
+                <div class="campo">
+
+                    <label>Edad</label>
+
+                    <input
+                        type="number"
+                        name="edad"
+                        value="{{ jugadora.edad }}"
+                        min="1"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label>Posición</label>
+
+                    <select name="posicion" required>
+
+                        <option value="Portera"
+                            {% if jugadora.posicion == "Portera" %}selected{% endif %}>
+                            🧤 Portera
+                        </option>
+
+                        <option value="Defensa"
+                            {% if jugadora.posicion == "Defensa" %}selected{% endif %}>
+                            🛡️ Defensa
+                        </option>
+
+                        <option value="Mediocampista"
+                            {% if jugadora.posicion == "Mediocampista" %}selected{% endif %}>
+                            ⚽ Mediocampista
+                        </option>
+
+                        <option value="Delantera"
+                            {% if jugadora.posicion == "Delantera" %}selected{% endif %}>
+                            ⚡ Delantera
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label>Mensualidad</label>
+
+                    <input
+                        type="number"
+                        name="mensualidad"
+                        value="{{ jugadora.mensualidad }}"
+                        min="0"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="boton"
+                >
+                    💾 Guardar cambios
+                </button>
+
+
+                <a
+                    href="/jugadoras"
+                    class="cancelar"
+                >
+                    ↩ Cancelar
+                </a>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

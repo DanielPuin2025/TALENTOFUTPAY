@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Torneo - TalentoFutPay</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #eef2f7;
+        }
+
+        .menu {
+            width: 240px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #0b2d5c;
+            color: white;
+            padding: 25px 20px;
+            overflow-y: auto;
+        }
+
+        .menu h2 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .menu a:hover {
+            background: #2ecc71;
+        }
+
+        .contenido {
+            margin-left: 240px;
+            padding: 35px;
+        }
+
+        .encabezado {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.10);
+        }
+
+        .encabezado h1 {
+            color: #0b2d5c;
+        }
+
+        .formulario {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 750px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.10);
+        }
+
+        .formulario h2 {
+            color: #0b2d5c;
+            margin-bottom: 25px;
+        }
+
+        .campo {
+            margin-bottom: 18px;
+        }
+
+        .campo label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .campo input,
+        .campo select,
+        .campo textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .campo textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .boton {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .boton:hover {
+            background: #27ae60;
+        }
+
+        .btn-cancelar {
+            background: #95a5a6;
+            color: white;
+            padding: 13px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-cancelar:hover {
+            background: #7f8c8d;
+            color: white;
+        }
+
+        @media (max-width: 800px) {
+            .menu { position: relative; width: 100%; height: auto; padding: 16px; }
+            .menu a { display: inline-block; padding: 10px; margin: 3px 0; }
+            .contenido { margin-left: 0; padding: 18px; }
+            .formulario { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="menu">
+    <h2><img src="{{ url_for('static', filename='img/logo-transparente.png') }}" alt="TalentoFutPay" style="width:220px; max-width:100%; height:auto;"></h2>
+    <a href="/">Inicio</a>
+    <a href="/dashboard">Resumen general</a>
+    <a href="/jugadoras">Jugadoras</a>
+    <a href="/pagos">Pagos</a>
+    <a href="/reportes">Reportes</a>
+    <a href="/torneos">Torneos</a>
+    <a href="/recordatorios_pendientes">Recordatorios</a>
+    {% if session.rol == 'admin' %}
+    <a href="/panel_admin">Panel Administrador</a>
+    {% endif %}
+    <a href="/cerrar_sesion" onclick="return confirm('¿Está seguro de que desea cerrar sesión?');">Cerrar sesión</a>
+    <a href="/cambiar_clave">Cambiar contraseña</a>
+    <a href="/descargar_respaldo">Descargar respaldo</a>
+</div>
+
+<div class="contenido">
+    <div class="encabezado">
+        <h1>✏️ Editar Torneo</h1>
+    </div>
+
+    {% with mensajes = get_flashed_messages(with_categories=true) %}
+        {% for categoria, mensaje in mensajes %}
+            <div class="mensaje {{ categoria }}" style="margin-bottom:18px; padding:13px 16px; border-radius:8px; font-weight:bold; background: {% if categoria == 'success' %}#d4edda{% else %}#f8d7da{% endif %}; color: {% if categoria == 'success' %}#155724{% else %}#721c24{% endif %};">
+                {{ mensaje }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="formulario">
+        <h2>Modificar Información del Torneo</h2>
+
+        <form method="POST">
+            <div class="campo">
+                <label>Nombre del Torneo *</label>
+                <input type="text" name="nombre" value="{{ torneo.nombre }}" required>
+            </div>
+
+            <div class="campo">
+                <label>Fecha de Inicio *</label>
+                <input type="date" name="fecha_inicio" value="{{ torneo.fecha_inicio }}" required>
+            </div>
+
+            <div class="campo">
+                <label>Fecha de Fin *</label>
+                <input type="date" name="fecha_fin" value="{{ torneo.fecha_fin }}" required>
+            </div>
+
+            <div class="campo">
+                <label>Ubicación</label>
+                <input type="text" name="ubicacion" value="{{ torneo.ubicacion or '' }}">
+            </div>
+
+            <div class="campo">
+                <label>Descripción</label>
+                <textarea name="descripcion">{{ torneo.descripcion or '' }}</textarea>
+            </div>
+
+            <button type="submit" class="boton">💾 Guardar Cambios</button>
+            <a href="/torneos" class="btn-cancelar">Cancelar</a>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

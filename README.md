@@ -49,24 +49,17 @@ python app.py
 http://localhost:5000
 ```
 
-## 👤 Usuarios por Defecto
+## 👤 Acceso
 
-| Usuario | Contraseña | Rol |
-|---------|-----------|-----|
-| admin | admin123 | Administrador (acceso total) |
-| instructor | instructor123 | Instructor |
-| instructor2 | instructor123 | Instructor |
-| carlos_rodriguez | instructor123 | Instructor |
-| tesorero | tesorero123 | Tesorero |
-
-**⚠️ IMPORTANTE**: Cambiar estas contraseñas en producción.
+Configura las cuentas iniciales mediante variables privadas en Easypanel. No uses
+credenciales predeterminadas en producción; una base de datos existente conserva
+las cuentas guardadas y cambiar las variables no cambia sus contraseñas.
 
 ## 📁 Estructura del Proyecto
 
 ```
 TALENTOFUTPAY/
 ├── app.py                      # Aplicación principal Flask
-├── talentofutpay.db           # Base de datos SQLite
 ├── requirements.txt           # Dependencias Python
 ├── README.md                  # Este archivo
 ├── GUIA_PRUEBAS.md           # Guía detallada de pruebas
@@ -167,66 +160,17 @@ Enero: $XX.XXX, Febrero: $XX.XXX
 Por favor, comuníquese con nosotros para ponerse al día. Gracias.
 ```
 
-## 🚀 Despliegue en Producción
+## 🚀 Despliegue en Easypanel
 
-### 1. Preparar el entorno
-
-```bash
-# Instalar dependencias
-pip install -r requirements.txt
-
-# Crear directorio para fotos de creadoras
-mkdir -p static/img/creadoras
-```
-
-### 2. Configurar para producción
-
-Editar `app.py` y cambiar:
-```python
-if __name__ == "__main__":
-    host, port = get_server_config()
-    app.run(host=host, port=port, debug=False)  # Cambiar debug=False
-```
-
-### 3. Usar servidor WSGI (recomendado)
-
-```bash
-# Instalar Gunicorn
-pip install gunicorn
-
-# Ejecutar con Gunicorn
-gunicorn -w 4 -b 0.0.0.0:5000 app:app
-```
-
-### 4. Configurar con Nginx (recomendado)
-
-```nginx
-server {
-    listen 80;
-    server_name talentofutpay.programamega.com;
-
-    location / {
-        proxy_pass http://127.0.0.1:5000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-
-    location /static {
-        alias /ruta/a/TALENTOFUTPAY/static;
-    }
-}
-```
+Sigue [DEPLOY_QUICKSTART.md](./DEPLOY_QUICKSTART.md) para configurar GitHub,
+Dockerfile, secretos, volúmenes persistentes, dominio y verificación de salud.
 
 ## 🔒 Seguridad en Producción
 
-1. **Cambiar todas las contraseñas por defecto**
-2. **Configurar SECRET_KEY segura** en `app.py`:
-   ```python
-   app.secret_key = "tu_clave_secreta_muy_larga_y_aleatoria"
-   ```
-3. **Configurar HTTPS** con certificado SSL
-4. **Restringir permisos** de archivos y directorios
-5. **Realizar backups** periódicos de la base de datos
+1. Configurar `TALENTOFUTPAY_SECRET_KEY` como secreto privado en Easypanel.
+2. Usar contraseñas fuertes y únicas; no guardar secretos en GitHub.
+3. Mantener almacenamiento persistente y respaldos recuperables.
+4. Configurar el dominio con HTTPS.
 
 ## 📊 Respaldos
 
@@ -238,8 +182,8 @@ El sistema incluye función de respaldo automático:
 ## 🆘 Solución de Problemas
 
 ### Error: "Usuario o contraseña incorrectos"
-- Verificar que la base de datos esté inicializada
-- Usar credenciales por defecto listadas arriba
+- Verificar que la base persistente contenga las cuentas esperadas.
+- Cambiar la contraseña desde la opción de administración correspondiente.
 
 ### Error: "No se puede subir foto"
 - Verificar permisos del directorio `static/img/creadoras/`
@@ -252,7 +196,7 @@ El sistema incluye función de respaldo automático:
 ## 📞 Contacto y Soporte
 
 - **Repositorio**: https://github.com/DanielPuin2025/TALENTOFUTPAY
-- **Producción**: http://talentofutpay.programamega.com
+- **Producción**: https://talentofutpay.programamega.com
 - **Panel**: http://144.126.156.160:3000/projects/yearbook/app/talentofutpay
 
 ## 📝 Licencia
@@ -262,8 +206,3 @@ El sistema incluye función de respaldo automático:
 ## 🙏 Créditos
 
 Desarrollado para la gestión profesional de equipos de fútbol formativo femenino.
-
----
-
-**Versión**: 1.0.0
-**Última actualización**: 2025

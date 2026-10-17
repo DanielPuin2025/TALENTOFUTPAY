@@ -17,7 +17,12 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("TALENTOFUTPAY_SECRET_KEY", "talentofutpay-clave-local")
 USUARIO_ADMIN = os.environ.get("TALENTOFUTPAY_USER", "admin")
 CLAVE_ADMIN = os.environ.get("TALENTOFUTPAY_PASSWORD", "admin123")
-DATABASE = Path(__file__).with_name("talentofutpay.db")
+DATABASE = Path(
+    os.environ.get(
+        "TALENTOFUTPAY_DATABASE_PATH",
+        str(Path(__file__).with_name("talentofutpay.db")),
+    )
+)
 
 
 def get_connection():
@@ -27,6 +32,7 @@ def get_connection():
 
 
 def init_database():
+    DATABASE.parent.mkdir(parents=True, exist_ok=True)
     with get_connection() as connection:
         connection.executescript(
             """

@@ -30,8 +30,10 @@ instance/
 # Variables de entorno
 .env
 
-# Base de datos (comentar si quieres incluir DB inicial)
-# talentofutpay.db
+# Bases de datos
+*.db
+*.sqlite
+*.sqlite3
 
 # IDE
 .vscode/

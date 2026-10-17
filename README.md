@@ -167,7 +167,8 @@ Dockerfile, secretos, volúmenes persistentes, dominio y verificación de salud.
 
 ## 🔒 Seguridad en Producción
 
-1. Configurar `TALENTOFUTPAY_SECRET_KEY` como secreto privado en Easypanel.
+1. Conservar `/data/talentofutpay.secret_key`, que el contenedor genera si no se
+   define `TALENTOFUTPAY_SECRET_KEY` como secreto privado en Easypanel.
 2. Usar contraseñas fuertes y únicas; no guardar secretos en GitHub.
 3. Mantener almacenamiento persistente y respaldos recuperables.
 4. Configurar el dominio con HTTPS.

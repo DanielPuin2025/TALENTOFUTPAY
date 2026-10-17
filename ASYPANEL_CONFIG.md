@@ -40,9 +40,13 @@ Define en Easypanel:
 
 | Variable | Valor |
 | --- | --- |
-| `TALENTOFUTPAY_SECRET_KEY` | Secreto aleatorio largo y privado |
 | `TALENTOFUTPAY_DATABASE_PATH` | `/data/talentofutpay.db` |
 | `PORT` | `5000` |
+
+Si no defines `TALENTOFUTPAY_SECRET_KEY`, el entrypoint crea una clave aleatoria en
+`/data/talentofutpay.secret_key` y la reutiliza mientras exista el volumen. No la
+elimines al reconstruir el servicio. Una variable `TALENTOFUTPAY_SECRET_KEY`
+configurada como secreto prevalece sobre el archivo.
 
 Las credenciales iniciales `TALENTOFUTPAY_USER` y `TALENTOFUTPAY_PASSWORD` solo se
 usan al crear el usuario admin por primera vez. La base existente conserva las

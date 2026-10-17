@@ -12,12 +12,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py .
 COPY templates/ ./templates/
 COPY static/ ./static/
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 RUN mkdir -p /data /app/static/img/creadoras /app/initial-creadoras \
     && cp -an /app/static/img/creadoras/. /app/initial-creadoras/ \
     && rm -rf /app/static/img/creadoras \
-    && ln -s /data/creadoras /app/static/img/creadoras
+    && ln -s /data/creadoras /app/static/img/creadoras \
+    && chmod 755 /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 5000
 
-CMD ["sh", "-c", "set -eu; mkdir -p /data/creadoras; cp -an /app/initial-creadoras/. /data/creadoras/; exec gunicorn --workers 2 --bind 0.0.0.0:${PORT:-5000} app:app"]
+ENTRYPOINT ["sh", "/usr/local/bin/docker-entrypoint.sh"]

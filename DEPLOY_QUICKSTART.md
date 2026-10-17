@@ -47,14 +47,15 @@ En `Projects > yearbook > talentofutpay`, usa estos valores:
 
 Configura los valores en Easypanel, nunca en Git:
 
-```env
-TALENTOFUTPAY_SECRET_KEY=<clave aleatoria larga y privada>
-TALENTOFUTPAY_DATABASE_PATH=/data/talentofutpay.db
-PORT=5000
-```
+El `Dockerfile` define `TALENTOFUTPAY_DATABASE_PATH=/data/talentofutpay.db` y el
+puerto `5000`. Si `TALENTOFUTPAY_SECRET_KEY` no está configurada, el entrypoint
+genera una clave aleatoria una sola vez y la guarda en
+`/data/talentofutpay.secret_key`. Conserva el volumen `/data`; no guardes esa clave
+en GitHub ni la elimines al reconstruir.
 
-Genera una clave con `python -c "import secrets; print(secrets.token_urlsafe(48))"`
-y guárdala directamente como secreto en Easypanel.
+Si administras `TALENTOFUTPAY_SECRET_KEY` como secreto de Easypanel, el valor
+configurado prevalece sobre el archivo persistente. Rota esa clave solo desde una
+conexión segura; al cambiarla se invalidan las sesiones existentes.
 
 `TALENTOFUTPAY_USER` y `TALENTOFUTPAY_PASSWORD` solo inicializan la cuenta admin
 cuando la base de datos no contiene esa cuenta. Actualizar estas variables no cambia

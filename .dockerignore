@@ -10,3 +10,12 @@ __pycache__
 .env.*
 logs
 tests
+.claude
+*.md
+*.bat
+.env.example
+render.yaml
+nginx_config
+gunicorn_config.py
+backup.sh
+start_production.sh

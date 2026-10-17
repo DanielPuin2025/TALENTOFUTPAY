@@ -38,9 +38,11 @@ instance/
 # IDE
 .vscode/
 .idea/
+.claude/
 *.swp
 *.swo
 *~
+static - copia/
 
 # OS
 .DS_Store

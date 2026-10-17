@@ -27,6 +27,9 @@ wheels/
 instance/
 .webassets-cache
 
+# Variables de entorno
+.env
+
 # Base de datos (comentar si quieres incluir DB inicial)
 # talentofutpay.db
 
@@ -43,7 +46,12 @@ Thumbs.db
 
 # Logs
 *.log
+logs/
 
 # Backups
 *.db-backup
 *_respaldo.db
+
+# Production
+*.pid
+gunicorn.sock

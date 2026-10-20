@@ -14,10 +14,9 @@ COPY templates/ ./templates/
 COPY static/ ./static/
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
-RUN mkdir -p /data /app/static/img/creadoras /app/initial-creadoras \
-    && cp -an /app/static/img/creadoras/. /app/initial-creadoras/ \
-    && rm -rf /app/static/img/creadoras \
-    && ln -s /data/creadoras /app/static/img/creadoras \
+RUN mkdir -p /data /app/initial-uploads \
+    && cp -an /app/static/img/. /app/initial-uploads/ \
+    && rm -rf /app/static/img/* \
     && chmod 755 /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 5000

@@ -1117,14 +1117,11 @@ def admin_editar_creadora(creadora_id):
                 if extension in ["jpg", "jpeg", "png", "gif"]:
                     # Generar nombre único
                     nombre_archivo = f"creadora_{creadora_id}_{int(datetime.now().timestamp())}.{extension}"
-                    ruta_archivo = os.path.join("static", "img", "creadoras", nombre_archivo)
+                    ruta_archivo = os.path.join("static", "img", nombre_archivo)
 
-                    # Crear directorio si no existe
-                    os.makedirs(os.path.join("static", "img", "creadoras"), exist_ok=True)
-
-                    # Guardar archivo
+                    # Guardar archivo directamente en static/img/
                     archivo.save(ruta_archivo)
-                    foto_actual = f"creadoras/{nombre_archivo}"
+                    foto_actual = nombre_archivo
                 else:
                     flash("Formato de imagen no válido. Use JPG, PNG o GIF.", "error")
                     return redirect(f"/admin_editar_creadora/{creadora_id}")

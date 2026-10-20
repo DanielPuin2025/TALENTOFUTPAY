@@ -3,7 +3,7 @@ import re
 import sqlite3
 import csv
 import io
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 from urllib.parse import quote
 
